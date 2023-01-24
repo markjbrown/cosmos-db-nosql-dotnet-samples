@@ -4,13 +4,20 @@
 
 // <using_directives> 
 using Microsoft.Azure.Cosmos;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Configuration.Json;
 // </using_directives>
 
 // <client_credentials> 
+var configuration = new ConfigurationBuilder()
+.SetBasePath(Directory.GetCurrentDirectory())
+.AddJsonFile($"appsettings.json");
+var config = configuration.Build();
+
 // New instance of CosmosClient class
 using CosmosClient client = new(
-    accountEndpoint: Environment.GetEnvironmentVariable("COSMOS_ENDPOINT")!,
-    authKeyOrResourceToken: Environment.GetEnvironmentVariable("COSMOS_KEY")!
+    accountEndpoint: config["uri"],
+    authKeyOrResourceToken: config["key"]
 );
 // </client_credentials>
 
